@@ -10,17 +10,11 @@ const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 
-const { celebrate, Joi } = require('celebrate');
-
 const { errors } = require('celebrate');
 
-const Notfound = require('./errors/notfound');
+// const Notfound = require('./errors/notfound');
 
-const userRout = require('./routs/userRout');
-
-const movieRout = require('./routs/movieRout');
-
-const auth = require('./middlewares/auth');
+// const auth = require('./middlewares/auth');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -31,16 +25,11 @@ const app = express();
 const allowedCors = [
   'https://workshop-diploma.nomoreparties.sbs',
   'http://workshop-diploma.nomoreparties.sbs',
-  'http://localhost:3030',
-  'https://localhost:3030',
+  'http://localhost:3000',
+  'https://localhost:3000',
 ];
 
-const {
-  userCreate, login,
-} = require('./controllers/users');
-
-mongoose.connect(`mongodb://localhost:27017/${NODE_ENV === 'production' ? DATABASE : 'filmsdb'}`);
-
+mongoose.connect(NODE_ENV === 'production' ? DATABASE : 'mongodb://localhost:27017/filmsdb');
 app.use((req, res, next) => {
   const { origin } = req.headers;
 
@@ -64,25 +53,16 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().required().min(2).max(30),
-  }),
-}), userCreate);
-app.use(auth);
-app.use('/users', userRout);
-app.use('/movies', movieRout);
-app.use('/', () => {
-  throw new Notfound('Нет такой страницы');
-});
+app.use(require('./routs/index'));
+// app.use(require('./routs/authRout'));
+
+// app.use(auth);
+// app.use(require('./routs/userRout'));
+// app.use(require('./routs/movieRout'));
+
+// app.use('/', () => {
+//   throw new Notfound('Нет такой страницы');
+// });
 
 app.use(errorLogger);
 

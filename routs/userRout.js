@@ -6,11 +6,11 @@ const {
   updateProfile, selectedUser,
 } = require('../controllers/users');
 
-userRout.get('/me', selectedUser);
-userRout.patch('/me', celebrate({
+userRout.get('/users/me', selectedUser);
+userRout.patch('/users/me', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
+    email: Joi.string().required().email(),
   }),
 }), updateProfile);
 

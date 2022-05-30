@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const urlRegex = require('../regex/urlRegex');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /(^https?:\/\/)?[a-z0-9~_\-.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$/i.test(v);
+        return urlRegex.test(v);
       },
     },
   },
@@ -35,7 +36,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /(^https?:\/\/)?[a-z0-9~_\-.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$/i.test(v);
+        return urlRegex.test(v);
       },
     },
   },
@@ -44,7 +45,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /(^https?:\/\/)?[a-z0-9~_\-.]+\.[a-z]{2,9}(\/|:|\?[!-~]*)?$/i.test(v);
+        return urlRegex.test(v);
       },
     },
   },

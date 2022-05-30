@@ -8,7 +8,6 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const BadRequest = require('../errors/badRequest');
 const Unauthorized = require('../errors/unauthorized');
-const Notfound = require('../errors/notfound');
 const Conflict = require('../errors/conflict');
 
 const userCreate = (req, res, next) => {
@@ -59,7 +58,7 @@ const updateProfile = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') return next(new BadRequest('Переданы некорректные данные'));
-      if (err.name === 'CastError') return next(new BadRequest('Переданы некорректные данные'));
+      if (err.code === 11000) return next(new Conflict('Email уже используется'));
       return next(err);
     });
 };
@@ -85,7 +84,7 @@ const selectedUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new Notfound('Запрашиваемый пользователь не найден');
+        throw new BadRequest('Переданы некорректные данные');
       }
       const {
         _id, email, name,
@@ -95,8 +94,7 @@ const selectedUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError') return next(new BadRequest('Запрашиваемый пользователь не найден'));
-      return next(err);
+      next(err);
     });
 };
 
