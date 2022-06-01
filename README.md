@@ -1,1 +1,9 @@
-# movies-explorer-api
+# Дипломная работа студента ЯндексПрактикума
+
+**О проекте**
+
+Реализован 1 этап дипломной работы (backend часть приложения).
+
+**Ссылки**
+
+* [Ссылка на backend](https://api.workshop-diploma.nomoreparties.sbs).
